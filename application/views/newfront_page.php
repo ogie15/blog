@@ -74,9 +74,9 @@
                    
 
                             <!-- End Post -->
-                             <div class="pagination">
+                             <div class="pagination" >
                                 <a href="" ng-click= "page(90)"><i class="fa fa-angle-left" ></i></a>
-                               <span ng-repeat="x in numArrayu"> <a href="" ng-click= "page(x.pag)" class="{{act}}" >{{x.i}}</a></span>
+                                <span ng-repeat="x in numArrayu"> <a href="" ng-click= "page(x.pag, x.i)" class="{{x.cal}}">{{x.i}}</a></span>
                                 <!-- <a href="" ng-click= "page(3)">2</a>
                                 <a href="" ng-click= "page(6)">3</a> -->
                                 <a class="no-active">...</a>
@@ -118,8 +118,11 @@
                     var z;
                     var pag;
                     var numArray=[];
+                    var rr;
+                    $scope.new=[];
+                    $scope.numArrayu=[];
+                    var checki;
 
-                    
                         $interval(function (){$http.get("<?php echo(base_url());?>Blog_controller/pingFpage").then(function (response){
                         $scope.myData = response.data;
                         chk = response.data;
@@ -133,38 +136,127 @@
                             }else{
                                 pag= pag+3;
                             }
-                            numArray.push({"i":i, "pag":pag})
+                            numArray.push({"i":i, "pag":pag, "cal":""});
                         }
-                        $scope.numArrayu = numArray
+                        var dem = numArray;
                         $scope.lass= pag+3;
                         $scope.rlvar = rlvar;
 
-                        $scope.page= 
-                        function(q){
+                        
+                        if(s!=0){ console.log("lold"); $scope.numArrayu= $scope.new;}
+                        else if (s==0) {console.log("lol"); $scope.numArrayu = dem;}
+
+                        $scope.page=
+                        function(q,r){
                             s=1;
+                            rr=r-1;
                             if (q==90){
                                 if (z!=0){
                                     p=z-3;
+                                    // PAGINATION ACTIVE CODE
+                                    for(var i=0; i<$scope.numArrayu.length; i++){
+                                        console.log("james");
+                                        checki =$scope.numArrayu[i].pag;
+                                        console.log(checki);
+                                        if (p==checki){
+                                            p=checki;
+                                            console.log(p);
+                                            rr=i;
+                                            
+                                            break;
+                                        }
+                                    }
+                                    console.log(rr+"llf");
                                 }else{
                                     P=0;
+                                    // PAGINATION ACTIVE CODE FOR LOOP
+                                    for(var i=0; i<$scope.numArrayu.length; i++){
+                                        console.log("james");
+                                        checki =$scope.numArrayu[i].pag;
+                                        console.log(checki);
+                                        if (p==checki){
+                                            p=checki;
+                                            console.log(p);
+                                            rr=i;
+                                            
+                                            break;
+                                        }
+                                    }
                                 }
                             }else if(q==91){
                                 if (z == $scope.lass){
                                     p= $scope.lass;
-                                }else {
+                                    // PAGINATION ACTIVE CODE FOR LOOP
+                                    for(var i=0; i<$scope.numArrayu.length; i++){
+                                        console.log("james");
+                                        checki =$scope.numArrayu[i].pag;
+                                        console.log(checki);
+                                        if (p==checki){
+                                            p=checki;
+                                            console.log(p);
+                                            rr=i;
+                                            
+                                            break;
+                                        }
+                                    }
+                                }else{
                                     p=z+3;
+                                    // PAGINATION ACTIVE CODE FOR LOOP
+                                    for(var i=0; i<$scope.numArrayu.length; i++){
+                                        console.log("james");
+                                        checki =$scope.numArrayu[i].pag;
+                                        console.log(checki);
+                                        if (p==checki){
+                                            p=checki;
+                                            console.log(p);
+                                            rr=i;
+                                            
+                                            break;
+                                        }
+                                    }
                                 }
                             }else if(q!=90 || q!=91){
-                                p = q; 
+                                p = q;
+                            }
+                            // PAGINATION ACTIVE CODE FOR LOOP
+                            if ($scope.numArrayu[rr].pag==p){
+                                console.log("jjkj");
+                                console.log(rr);
+                                $scope.numArrayu=dem;
+                                $scope.numArrayu[rr].cal="active";
+                                $scope.new=$scope.numArrayu;
                             }
                         }
+                        
+
                             if (s==1){
                                 p=p;
                             }else if (s==0){
                                 p=0;
+                                // PAGINATION ACTIVE CODE FOR LOOP
+                                for(var i=0; i<$scope.numArrayu.length; i++){
+                                    console.log("james");
+                                    checki =$scope.numArrayu[i].pag;
+                                    console.log(checki);
+                                    if (p==checki){
+                                        p=checki;
+                                        console.log(p);
+                                        rr=i;
+                                        
+                                        break;
+                                    }
+                                }
+                                if ($scope.numArrayu[rr].pag==p){
+                                console.log("jjkj");
+                                console.log(rr);
+                                $scope.numArrayu=dem;
+                                $scope.numArrayu[rr].cal="active";
+                                $scope.new=$scope.numArrayu;
+                                }
+                                // END PAGINATION ACTIVE CODE FOR LOOP
                             }
                             d= p+3;
-                            z=p;
+                            z=p; 
                             for(x=p; x<d; x++){
                                 $scope.myData[x];
                                 if (response.data[x] == null){
@@ -175,6 +267,7 @@
                             fgh = [];
                             numArray=[];
                             })}
+
                         ,500);
 
                 }); 
